@@ -1,11 +1,16 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { Poppins } from "next/font/google"
+
+const poppins = Poppins({subsets: ["latin"], weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"]})
 
 export default function Option({index, text}) {
 
   /* State to get the letter for the option: */
   const [letter, setLetter] = useState("")
+  /* State for if the button is clicked */
+  const [isClicked, setIsClicked] = useState(false)
 
   
   /* Get the letter for the option: (A B C or D) */
@@ -29,13 +34,26 @@ export default function Option({index, text}) {
     optionLetter();
   }, [])
 
+
+  /* Toggle clicked state */
+  const handleClick = () => {
+    setIsClicked(!isClicked)
+  }
+
   
   return (
-    <div className="flex flex-row gap-2">
-      {/* Option Letter: */}
-      <p>{letter}.</p>
-      {/* Option Text */}
-      <p>{text}</p>
-    </div>
+    <button onClick={handleClick}>
+      <div className={`${isClicked ? "border-2" : "border-[1px]"} flex flex-row gap-2
+                    border-black bg-[#DEDDDE] p-2 pr-10 rounded-sm items-center`}>
+        {/* Option Letter: */}
+        <div className={`${isClicked ? "bg-black text-white" : "bg-[#EBEAEC] text-black border-black border-[0.2px]"}
+                      ${poppins.className} text-sm font-medium px-2 py-1 rounded-sm`}>
+          {letter}
+        </div>
+
+        {/* Option Text */}
+        <p> {text} </p>
+      </div>
+    </button>
   )
 }

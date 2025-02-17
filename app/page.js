@@ -32,7 +32,7 @@ export default function Home() {
           </div>
 
           {/* Answer Options: */}
-          <div className="flex w-full px-10 justify-between items-center">
+          <div className="flex flex-wrap w-full px-10 justify-center gap-x-5">
             {options.map((option, index) => (
               <div key={option} className="flex flex-row gap-3 py-2">
                 {/* Display all the options: */}
