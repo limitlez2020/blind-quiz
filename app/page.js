@@ -1,9 +1,12 @@
-import Options from "./components/options";
+"use client"
+
+import { useState } from "react";
+import Option from "./components/Option";
 
 export default function Home() {
   const questionNum = 1;
   const question = "What is the name of the current President of the US?";
-  const answers = ["Donald Trump", "Barrack Obama", "Ronald Reagan", "Kamala Harris"];
+  const options = ["Donald Trump", "Barrack Obama", "Ronald Reagan", "Kamala Harris"];
   const correctAnswer = "Donald Trump";
 
 
@@ -29,7 +32,17 @@ export default function Home() {
           </div>
 
           {/* Answer Options: */}
-          
+          <div className="flex w-full px-10 justify-between items-center">
+            {options.map((option, index) => (
+              <div key={option} className="flex flex-row gap-3 py-2">
+                {/* Display all the options: */}
+                <Option 
+                  index={index}
+                  text={option}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
