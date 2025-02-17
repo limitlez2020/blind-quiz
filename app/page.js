@@ -17,7 +17,7 @@ export default function Home() {
         {/* Logo: */}
         <p className="font-semibold"> Typequiz </p>
         {/* Button: */}
-        <div className="w-5 h-5 border-black border-[1px] rounded-full"></div>
+        <div className="w-5 h-5 border-black border-[1px] rounded-md"></div>
       </div>
 
       {/* Main Body: */}
@@ -32,7 +32,7 @@ export default function Home() {
           </div>
 
           {/* Answer Options: */}
-          <div className="flex flex-wrap w-full px-10 justify-center gap-x-5">
+          <div className="flex flex-wrap w-2/5 px-10 justify-center gap-x-5">
             {options.map((option, index) => (
               <div key={option} className="flex flex-row gap-3 py-2">
                 {/* Display all the options: */}
