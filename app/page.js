@@ -2,6 +2,11 @@
 
 import { useState } from "react";
 import Option from "./components/Option";
+import { Poppins } from "next/font/google";
+
+
+const poppins = Poppins({subsets: ["latin"], weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"]})
+
 
 export default function Home() {
   const questionNum = 1;
@@ -15,16 +20,20 @@ export default function Home() {
       {/* Header */}
       <div className="flex w-full justify-between px-6 py-4">
         {/* Logo: */}
-        <p className="font-semibold"> Typequiz </p>
+        <p className={`${poppins.className} font-semibold`}> Quiz </p>
         {/* Button: */}
-        <div className="w-5 h-5 border-black border-[1px] rounded-md"></div>
+        <div className={`${poppins.className} flex w-6 h-6 text-white bg-black items-center
+                         justify-center rounded-sm text-xs font-medium`}>
+          A
+        </div>
       </div>
 
       {/* Main Body: */}
       <div className="flex w-full h-[41rem] px-6 justify-center items-center">
         {/* Container */}
         <div className="flex flex-col bg-[#F0F0F0] w-full h-full px-5
-                        rounded-2xl justify-center items-center">
+                        rounded-2xl justify-center items-center"
+        >
           {/* Question: */}
           <div className="flex flex-row gap-3 pb-4">
             <p>{questionNum}.</p>
@@ -42,6 +51,11 @@ export default function Home() {
                 />
               </div>
             ))}
+          </div>
+
+          {/* Bottom Part" */}
+          <div className="">
+            {/* Button */}
           </div>
         </div>
       </div>
