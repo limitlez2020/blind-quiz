@@ -84,7 +84,7 @@ export default function Home() {
             </div>
 
             {/* Instruction: */}
-            <p className="text-xs italic mt-3 text-gray-500">press spacebar to start speaking</p>
+            <p className="text-[10px] sm:text-xs italic mt-3 text-gray-500">press spacebar to start speaking</p>
           </div>
         </div>
       </div>
