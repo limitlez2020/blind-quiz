@@ -12,10 +12,51 @@ const poppins = Poppins({subsets: ["latin"], weight: ["100", "200", "300", "400"
 
 
 export default function Home() {
-  const questionNum = 1;
-  const question = "What is the name of the current President of the US?";
-  const options = ["Donald Trump", "Barrack Obama", "Ronald Reagan", "Kamala Harris"];
-  const correctAnswer = "Donald Trump";
+  /* Keep track of the current question */
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  /* Array of question objects: */
+  const questions = [
+    {
+      question: "What is the name of the current President of the US?",
+      options: ["Donald Trump", "Barrack Obama", "Ronald Reagan", "Kamala Harris"],
+      correctAnswer: "Donald Trump",
+    },
+    {
+      question: "What is the capital of France?",
+      options: ["Paris", "London", "Berlin", "Madrid"],
+      correctAnswer: "Paris",
+    }
+  ]
+
+  /* Array of selected answers by the user */
+  // TODO:
+
+
+  /* Move to next question */
+  const nextQuestion = () => {
+    /* Only move to next question if we're not on last question: */
+    if (currentQuestionIndex < questions.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1)
+    }
+    else {
+      return
+    }
+  }
+
+
+  /* Move to previous question */
+  const prevQuestion = () => {
+    /* Only move to the previous question if we're not on the first question: */
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(currentQuestionIndex - 1)
+    }
+    else {
+      return
+    }
+  }
+
+
+
 
 
   return (
@@ -41,13 +82,13 @@ export default function Home() {
           <div className="flex flex-col justify-center items-center w-full h-4/5">
             {/* Question: */}
             <div className="flex flex-row gap-3 pb-4">
-              <p>{questionNum}.</p>
-              <p className="text-2xl">{question}</p>
+              <p>{currentQuestionIndex + 1}.</p>
+              <p className="text-2xl">{questions[currentQuestionIndex].question}</p>
             </div>
 
             {/* Answer Options: */}
             <div className="flex flex-wrap w-2/5 px-10 justify-center gap-x-5">
-              {options.map((option, index) => (
+              {questions[currentQuestionIndex].options.map((option, index) => (
                 <div key={option} className="flex flex-row gap-3 py-2">
                   {/* Display all the options: */}
                   <Option 
@@ -64,7 +105,7 @@ export default function Home() {
             {/* Buttons */}
             <div className="flex justify-between items-center w-full px-5">
               {/* Prev Button: */}
-              <button className="bg-black p-2 rounded-sm">
+              <button className="bg-black p-2 rounded-sm" onClick={prevQuestion}>
                 <ChevronLeftIcon className="size-4 stroke-gray-300 stroke-[2]"
                                 strokeLinecap="round" strokeLinejoin="round"
                 />
@@ -76,7 +117,7 @@ export default function Home() {
               </button>
 
               {/* Next Button: */}
-              <button className="bg-black p-2 rounded-sm">
+              <button className="bg-black p-2 rounded-sm" onClick={nextQuestion}>
                 <ChevronRightIcon className="size-4 stroke-gray-300 stroke-[2]"
                                 strokeLinecap="round" strokeLinejoin="round"
                 />
