@@ -136,11 +136,11 @@ export default function Home() {
             {/* Question: */}
             <div className="flex flex-row gap-3 pb-4">
               <p>{currentQuestionIndex + 1}.</p>
-              <p className="text-2xl">{questions[currentQuestionIndex].question}</p>
+              <p className="text-2xl text-cen">{questions[currentQuestionIndex].question}</p>
             </div>
 
             {/* Answer Options: */}
-            <div className="grid grid-cols-2 mx-10 w-fit gap-x-5 gap-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 mx-10 w-fit gap-x-5 gap-y-3">
               {questions[currentQuestionIndex].options.map((option, index) => (
                 /* Display all the options: */
                 <Option
