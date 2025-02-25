@@ -104,9 +104,19 @@ export default function Home() {
   return (
     <div className="bg-white flex flex-col min-h-screen">
       {/* Header */}
-      <div className="flex w-full justify-between px-6 py-4">
+      <div className="flex w-full items-center justify-between px-6 py-4">
         {/* Logo: */}
         <p className={`${poppins.className} font-semibold`}> Quiz </p>
+
+        {/* Progress Bar: */}
+        <div className="flex w-1/5 h-1 bg-neutral-200 rounded-full">
+          <div className="bg-black h-1 rounded-full transition-all duration-500"
+               style={{
+                width: `${((currentQuestionIndex + 1) / questions.length) * 100}%`
+               }}
+          />
+        </div>
+
         {/* Button: */}
         <div className={`${poppins.className} flex size-6 text-white bg-black items-center
                          justify-center rounded-sm text-xs font-medium`}>
