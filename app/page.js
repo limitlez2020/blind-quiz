@@ -4,7 +4,7 @@ import { useState } from "react";
 import Option from "./components/Option";
 import { Poppins } from "next/font/google";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid"
-import { MicrophoneIcon } from "@heroicons/react/24/outline"
+import { MicrophoneIcon, SpeakerWaveIcon } from "@heroicons/react/24/outline"
 
 
 
@@ -33,19 +33,8 @@ export default function Home() {
    * fill it with empty strings */
   const [selectedAnswers, setSelectedAnswers] = useState(Array(questions.length).fill(""))
 
-
-  /* Move to next question */
-  const nextQuestion = () => {
-    /* Only move to next question if we're not on last question: */
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1)
-    }
-    else {
-      return
-    }
-  }
-
-
+  
+  
   /* Move to previous question */
   const prevQuestion = () => {
     /* Only move to the previous question if we're not on the first question: */
@@ -59,6 +48,25 @@ export default function Home() {
 
 
 
+  /* Move to next question */
+  const nextQuestion = () => {
+    /* Only move to next question if we're not on last question: */
+    if (currentQuestionIndex < questions.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1)
+    }
+    else {
+      return
+    }
+  }
+
+
+  /* Submit the quiz */
+  const handleSubmit = () => {
+    // TODO: implement this later
+    alert("The quiz has been submitted!")
+  }
+
+
 
 
   return (
@@ -68,8 +76,9 @@ export default function Home() {
         {/* Logo: */}
         <p className={`${poppins.className} font-semibold`}> Quiz </p>
         {/* Button: */}
-        <div className={`${poppins.className} flex w-6 h-6 text-white bg-black items-center
+        <div className={`${poppins.className} flex size-6 text-white bg-black items-center
                          justify-center rounded-sm text-xs font-medium`}>
+          {/* <SpeakerWaveIcon className="size-4 stroke-[1.6]"/> */}
           A
         </div>
       </div>
@@ -120,12 +129,21 @@ export default function Home() {
                 <MicrophoneIcon className="size-5 stroke-[1.35]" fill="none"/>
               </button>
 
-              {/* Next Button: */}
-              <button className="bg-black p-2 rounded-sm" onClick={nextQuestion}>
-                <ChevronRightIcon className="size-4 stroke-gray-300 stroke-[2]"
-                                strokeLinecap="round" strokeLinejoin="round"
-                />
-              </button>
+              {/* Submit Button or Next Button: */}
+              {(currentQuestionIndex === questions.length - 1) ? (
+                /* Submit Button */
+                <button className="bg-black p-2 rounded-sm" onClick={handleSubmit}>
+                  <p className={`${poppins.className} text-white text-xs font-medium`}>Submit</p>
+                </button>
+              ) : (
+                /* Next Button */
+                <button className="bg-black p-2 rounded-sm" onClick={nextQuestion}>
+                  <ChevronRightIcon className="size-4 stroke-gray-300 stroke-[2]"
+                                  strokeLinecap="round" strokeLinejoin="round"
+                  />
+                </button>
+              )}
+
             </div>
 
             {/* Instruction: */}
