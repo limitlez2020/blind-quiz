@@ -37,7 +37,7 @@ export default function Option({index, text, isSelected, onSelect}) {
 
   
   return (
-    <button className="w-" onClick={onSelect}>
+    <button onClick={onSelect}>
       <div className={`${isSelected ? "border-2" : "border-[1px]"} flex flex-row gap-2
                     border-black bg-[#DEDDDE] p-2 pr-20 rounded-sm items-center`}>
         {/* Option Letter: */}
@@ -47,7 +47,7 @@ export default function Option({index, text, isSelected, onSelect}) {
         </div>
 
         {/* Option Text */}
-        <p> {text} </p>
+        <p className="text-left"> {text} </p>
       </div>
     </button>
   )
