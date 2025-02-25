@@ -28,8 +28,10 @@ export default function Home() {
     }
   ]
 
-  /* Array of selected answers by the user */
-  // TODO:
+  /* Array of selected answers by the user
+   * Create an array with the same size as the # questions and 
+   * fill it with empty strings */
+  const [selectedAnswers, setSelectedAnswers] = useState(Array(questions.length).fill(""))
 
 
   /* Move to next question */
@@ -105,7 +107,9 @@ export default function Home() {
             {/* Buttons */}
             <div className="flex justify-between items-center w-full px-5">
               {/* Prev Button: */}
-              <button className="bg-black p-2 rounded-sm" onClick={prevQuestion}>
+              <button className={`${currentQuestionIndex === 0 ? "bg-neutral-600 pointer-events-none" : "bg-black"} p-2 rounded-sm`}
+                      onClick={prevQuestion}
+              >
                 <ChevronLeftIcon className="size-4 stroke-gray-300 stroke-[2]"
                                 strokeLinecap="round" strokeLinejoin="round"
                 />
