@@ -5,7 +5,7 @@ import { Poppins } from "next/font/google"
 
 const poppins = Poppins({subsets: ["latin"], weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"]})
 
-export default function Option({index, text}) {
+export default function Option({index, text, isSelected, onSelect}) {
 
   /* State to get the letter for the option: */
   const [letter, setLetter] = useState("")
@@ -42,11 +42,12 @@ export default function Option({index, text}) {
 
   
   return (
-    <button onClick={handleClick}>
-      <div className={`${isClicked ? "border-2" : "border-[1px]"} flex flex-row gap-2
+    // <button onClick={handleClick}>
+    <button onClick={onSelect}>
+      <div className={`${isSelected ? "border-2" : "border-[1px]"} flex flex-row gap-2
                     border-black bg-[#DEDDDE] p-2 pr-10 rounded-sm items-center`}>
         {/* Option Letter: */}
-        <div className={`${isClicked ? "bg-black text-white" : "bg-[#EBEAEC] text-black border-black border-[0.2px]"}
+        <div className={`${isSelected ? "bg-black text-white" : "bg-[#EBEAEC] text-black border-black border-[0.2px]"}
                       ${poppins.className} text-sm font-medium px-2 py-1 rounded-sm`}>
           {letter}
         </div>

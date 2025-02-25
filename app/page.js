@@ -56,7 +56,7 @@ export default function Home() {
   /* Array of selected answers by the user
    * Create an array with the same size as the # questions and 
    * fill it with empty strings */
-  const [selectedAnswers, setSelectedAnswers] = useState(Array(questions.length).fill(""))
+  const [selectedAnswers, setSelectedAnswers] = useState(Array(questions.length).fill(""));
 
   
   
@@ -66,11 +66,7 @@ export default function Home() {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1)
     }
-    else {
-      return
-    }
   }
-
 
 
   /* Move to next question */
@@ -78,9 +74,6 @@ export default function Home() {
     /* Only move to next question if we're not on last question: */
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1)
-    }
-    else {
-      return
     }
   }
 
@@ -90,6 +83,20 @@ export default function Home() {
     // TODO: implement this later
     alert("The quiz has been submitted!")
   }
+
+
+
+  /* Handle the choosing of options by user
+   * Keep track of the options chosen */
+  const handleOptionSelect = (option) => {
+    /* Update the selected answers array with the
+     * option chosen for the current question */
+    /* Make a copy of the selected answers */
+    const newAnswers = [...selectedAnswers];
+    newAnswers[currentQuestionIndex] = option;
+    setSelectedAnswers(newAnswers);
+  }
+
 
 
 
@@ -130,6 +137,9 @@ export default function Home() {
                   <Option 
                     index={index}
                     text={option}
+                    /* To know if this choice is selected: return the boolean */
+                    isSelected={selectedAnswers[currentQuestionIndex] === option}
+                    onSelect={() => handleOptionSelect(option)}
                   />
                 </div>
               ))}
@@ -141,7 +151,7 @@ export default function Home() {
             {/* Buttons */}
             <div className="flex justify-between items-center w-full px-5">
               {/* Prev Button: */}
-              <button className={`${currentQuestionIndex === 0 ? "bg-neutral-600 pointer-events-none" : "bg-black"} p-2 rounded-sm`}
+              <button className={`${currentQuestionIndex === 0 ? "bg-neutral-500 pointer-events-none" : "bg-black"} p-2 rounded-sm`}
                       onClick={prevQuestion}
               >
                 <ChevronLeftIcon className="size-4 stroke-gray-300 stroke-[2]"
