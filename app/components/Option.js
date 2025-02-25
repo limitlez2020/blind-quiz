@@ -35,19 +35,13 @@ export default function Option({index, text, isSelected, onSelect}) {
   }, [])
 
 
-  /* Toggle clicked state */
-  const handleClick = () => {
-    setIsClicked(!isClicked)
-  }
-
   
   return (
-    // <button onClick={handleClick}>
-    <button onClick={onSelect}>
+    <button className="w-" onClick={onSelect}>
       <div className={`${isSelected ? "border-2" : "border-[1px]"} flex flex-row gap-2
                     border-black bg-[#DEDDDE] p-2 pr-10 rounded-sm items-center`}>
         {/* Option Letter: */}
-        <div className={`${isSelected ? "bg-black text-white" : "bg-[#EBEAEC] text-black border-black border-[0.2px]"}
+        <div className={`${isSelected ? "bg-black text-white" : "bg-[#EBEAEC] text-black border-black border-[1px]"}
                       ${poppins.className} text-sm font-medium px-2 py-1 rounded-sm`}>
           {letter}
         </div>

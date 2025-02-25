@@ -140,18 +140,17 @@ export default function Home() {
             </div>
 
             {/* Answer Options: */}
-            <div className="flex flex-wrap w-2/5 px-10 justify-center gap-x-5">
+            <div className="grid grid-cols-2 mx-10 w-fit gap-x-5 gap-y-3">
               {questions[currentQuestionIndex].options.map((option, index) => (
-                <div key={option} className="flex flex-row gap-3 py-2">
-                  {/* Display all the options: */}
-                  <Option 
-                    index={index}
-                    text={option}
-                    /* To know if this choice is selected: return the boolean */
-                    isSelected={selectedAnswers[currentQuestionIndex] === option}
-                    onSelect={() => handleOptionSelect(option)}
-                  />
-                </div>
+                /* Display all the options: */
+                <Option
+                  key={option} 
+                  index={index}
+                  text={option}
+                  /* To know if this choice is selected: return the boolean */
+                  isSelected={selectedAnswers[currentQuestionIndex] === option}
+                  onSelect={() => handleOptionSelect(option)}
+                />
               ))}
             </div>
           </div>
