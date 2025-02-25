@@ -25,8 +25,33 @@ export default function Home() {
       question: "What is the capital of France?",
       options: ["Paris", "London", "Berlin", "Madrid"],
       correctAnswer: "Paris",
-    }
-  ]
+    },
+    {
+      question: "Which planet is known as the Red Planet?",
+      options: ["Earth", "Mars", "Jupiter", "Venus"],
+      correctAnswer: "Mars",
+    },
+    {
+      question: "Who wrote the play 'Romeo and Juliet'?",
+      options: ["William Shakespeare", "Charles Dickens", "Mark Twain", "Jane Austen"],
+      correctAnswer: "William Shakespeare",
+    },
+    {
+      question: "What is the largest ocean on Earth?",
+      options: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
+      correctAnswer: "Pacific Ocean",
+    },
+    {
+      question: "Which element has the chemical symbol 'O'?",
+      options: ["Oxygen", "Gold", "Iron", "Carbon"],
+      correctAnswer: "Oxygen",
+    },
+    {
+      question: "What is the smallest prime number?",
+      options: ["1", "2", "3", "5"],
+      correctAnswer: "2",
+    },
+  ];
 
   /* Array of selected answers by the user
    * Create an array with the same size as the # questions and 
