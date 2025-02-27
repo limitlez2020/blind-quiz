@@ -10,7 +10,7 @@ const poppins = Poppins({
 
 
 export default function NavBar({currentQuestionIndex, totalQestions}) {
-
+  /* State to know when we are in the Quiz page */
   const [inQuizPage, setInQuizPage] = useState(false)
 
   /* Figure out if we're in Quiz Page or not
@@ -25,6 +25,8 @@ export default function NavBar({currentQuestionIndex, totalQestions}) {
     }
   }, [])
 
+
+  
   return (
      /* Header */
      <div className="flex w-full items-center justify-between px-6 py-4">
