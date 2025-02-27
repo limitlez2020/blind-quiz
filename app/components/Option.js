@@ -7,33 +7,10 @@ const poppins = Poppins({subsets: ["latin"], weight: ["100", "200", "300", "400"
 
 export default function Option({index, text, isSelected, onSelect}) {
 
-  /* State to get the letter for the option: */
-  const [letter, setLetter] = useState("")
-  /* State for if the button is clicked */
-  const [isClicked, setIsClicked] = useState(false)
-
-  
   /* Get the letter for the option: (A B C or D) */
-  const optionLetter = () => {
-    if (index === 0) {
-      setLetter('A')
-    }
-    else if (index === 1) {
-      setLetter('B')
-    }
-    else if (index === 2) {
-      setLetter('C')
-    }
-    else if (index === 3) {
-      setLetter('D')
-    }
-  }
-
-  /* Call the optionLetter function when the component mounts */
-  useEffect(() => {
-    optionLetter();
-  }, [])
-
+  /* Get ASCII value and then turn it to corresponding char: */
+  let ascii_value = 65 + index
+  const optionLetter = String.fromCharCode(ascii_value)
 
   
   return (
@@ -43,7 +20,7 @@ export default function Option({index, text, isSelected, onSelect}) {
         {/* Option Letter: */}
         <div className={`${isSelected ? "bg-black text-white" : "bg-[#EBEAEC] text-black border-black border-[1px]"}
                       ${poppins.className} text-sm font-medium px-2 py-1 rounded-sm`}>
-          {letter}
+          {optionLetter}
         </div>
 
         {/* Option Text */}
