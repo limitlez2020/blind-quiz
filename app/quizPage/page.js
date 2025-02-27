@@ -1,18 +1,19 @@
 "use client"
 
 import { useState } from "react";
-import NavBar from "./components/NavBar";
+import Option from "../components/Option";
 import { Poppins } from "next/font/google";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid"
 import { MicrophoneIcon, SpeakerWaveIcon } from "@heroicons/react/24/outline"
 import Link from "next/link";
+import NavBar from "../components/NavBar";
 
 
 
 const poppins = Poppins({subsets: ["latin"], weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"]})
 
 
-export default function Home() {
+export default function Quiz() {
   /* Keep track of the current question */
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   /* Array of question objects: */
@@ -131,8 +132,12 @@ export default function Home() {
 
   return (
     <div className="bg-white flex flex-col min-h-screen">
-      {/* Header: navbar wih no progress bar */}
-      <NavBar/>
+      {/* Header */}
+      {/* We add the parameters coz we want to see progress bar in NavBar */}
+      <NavBar
+       currentQuestionIndex={currentQuestionIndex}
+       totalQestions={questions.length}
+      />
 
       {/* Main Body: */}
       <div className="flex w-full h-[41rem] px-6 justify-center items-center">
@@ -140,18 +145,71 @@ export default function Home() {
         <div className="flex flex-col bg-[#F0F0F0] w-full h-full px-5
                         rounded-2xl justify-center items-center"
         >
-          {/* Instructions */}
-          <div>
-            Here are the Instructions
+          {/* Question & Answers */}
+          <div className="flex flex-col justify-center items-center w-full h-4/5">
+            {/* Question: */}
+            <div className="flex flex-row gap-3 pb-4">
+              <p>{currentQuestionIndex + 1}.</p>
+              <p className="text-2xl text-cen">{questions[currentQuestionIndex].question}</p>
+            </div>
+
+            {/* Answer Options: */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 mx-10 w-fit gap-x-5 gap-y-3">
+              {questions[currentQuestionIndex].options.map((option, index) => (
+                /* Display all the options: */
+                <Option
+                  key={option} 
+                  index={index}
+                  text={option}
+                  /* To know if this choice is selected: return the boolean */
+                  isSelected={selectedAnswers[currentQuestionIndex] === option}
+                  onSelect={() => handleOptionSelect(option)}
+                />
+              ))}
+            </div>
           </div>
 
-          {/* Start Quiz: */}
-          <Link href={"/quizPage"}>
-            <button className="bg-black size-10">
-              Start Quiz
-            </button>
-          </Link>
-          
+          {/* Bottom Part */}
+          <div className="flex flex-col items-center w-full">
+            {/* Buttons */}
+            <div className="flex justify-between items-center w-full px-5">
+              {/* Prev Button: */}
+              <button className={`${currentQuestionIndex === 0 ? "bg-neutral-500 pointer-events-none" : "bg-black"} p-2 rounded-sm`}
+                      onClick={prevQuestion}
+              >
+                <ChevronLeftIcon className="size-4 stroke-gray-300 stroke-[2]"
+                                strokeLinecap="round" strokeLinejoin="round"
+                />
+              </button>
+
+              {/* Speaker Button: */}
+              <button className="border-black border-[1px] rounded-lg p-2">
+                <MicrophoneIcon className="size-5 stroke-[1.35]" fill="none"/>
+              </button>
+
+              {/* Submit Button or Next Button: */}
+              {(currentQuestionIndex === questions.length - 1) ? (
+                /* Submit Button */
+                <button className="bg-black p-2 rounded-sm" onClick={handleSubmit}>
+                  <p className={`${poppins.className} text-white text-xs font-medium`}>Submit</p>
+                </button>
+              ) : (
+                /* Next Button */
+                <button className="bg-black p-2 rounded-sm" onClick={nextQuestion}>
+                  <ChevronRightIcon className="size-4 stroke-gray-300 stroke-[2]"
+                                  strokeLinecap="round" strokeLinejoin="round"
+                  />
+                </button>
+              )}
+
+            </div>
+
+            {/* Instruction: */}
+            {/* Laptops: */}
+            <p className="hidden sm:block text-xs italic mt-3 text-gray-500">press spacebar to start speaking</p>
+            {/* Phones/Tablets: */}
+            <p className="block sm:hidden text-[10px] italic mt-3 text-gray-500">click to start speaking</p>
+          </div>
         </div>
       </div>
     </div>
