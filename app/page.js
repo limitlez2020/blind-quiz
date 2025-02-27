@@ -78,10 +78,37 @@ export default function Home() {
   }
 
 
+
   /* Submit the quiz */
   const handleSubmit = () => {
-    // TODO: implement this later
-    alert("The quiz has been submitted!")
+    /* Check if all questions have been answered: */
+    if (selectedAnswers.includes("")) {
+      /* Display the question numbers that have been unanswered: */
+      const unansweredQuestionNums = []
+      for (let i = 0; i < selectedAnswers.length; i++) {
+        if (selectedAnswers[i] === "") {
+          /* We add one to cover for the 0-indexing */
+          unansweredQuestionNums.push(i + 1)
+        }
+      }
+      
+      /* Print the questions unanswered: */
+      alert(`You still have some questions unanswered: ${unansweredQuestionNums}`)
+      return
+    }
+
+    /* Check if answers are correct: */
+    let score = 0;
+    questions.forEach((question, index) => {
+      /* Keep track of the how many gotten right */
+      if (question.correctAnswer === selectedAnswers[index]) {
+        score += 1;
+      }
+    })
+    
+    /* Display score and percentage */
+    let percentage = (score / questions.length) * 100
+    alert(`Congrats! You got ${score} out of ${questions.length} \nPercentage is: ${percentage}`)
   }
 
 
