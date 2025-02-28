@@ -45,22 +45,29 @@ export default function Home() {
               {/* Header */}
               <p className="text-2xl">Instructions</p>
               {/* Subheader */}
-              <p className="-mt-1 mb-1 text-xs">Say these words to control quiz</p>
+              <p className="-mt-1 mb-3 text-xs">Say these words to control quiz</p>
               
               {/* Instruction */}
               {instructions.map((instruction, index) => (
-                <div className="mb-1" key={index}>
-                  {index + 1}. {instruction}
+                <div className="mb-2 flex flex-row gap-2 items-center" key={index}>
+                  {/* Number */}
+                  <div className="border-[1px] text-sm border-black py-[3px] px-[9px]">
+                    {index + 1}.
+                  </div>
+                  {/* Text */}
+                  <p>
+                    {instruction}
+                  </p>
                 </div>
               ))}
             </div>
 
             {/* Start Quiz: */}
             <Link href={"/quizPage"}>
-              <button className="flex flex-row items-center justify-center self-end
-                              border-black border-[2px] py-2 px-3 gap-2 text-sm mt-2">
-                <p>Begin</p>
-                <ArrowTurnDownRightIcon className="mt-[5px] size-3"/>
+              <button className="flex flex-row items-center justify-center
+                              bg-black text-white py-2 px-3 gap-2 mt-2">
+                <p className={`${poppins.className} text-sm font-mednium`}>Begin</p>
+                <ArrowTurnDownRightIcon className="size-3"/>
               </button>
             </Link>
           </div>
