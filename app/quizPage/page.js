@@ -3,9 +3,10 @@
 import { useState } from "react";
 import Option from "../components/Option";
 import { Poppins } from "next/font/google";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid"
+import { ChevronLeftIcon, ChevronRightIcon, StopIcon } from "@heroicons/react/24/solid"
 import { MicrophoneIcon, SpeakerWaveIcon } from "@heroicons/react/24/outline"
-import Link from "next/link";
+import "regenerator-runtime/runtime"
+import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 import NavBar from "../components/NavBar";
 
 
@@ -16,6 +17,8 @@ const poppins = Poppins({subsets: ["latin"], weight: ["100", "200", "300", "400"
 export default function Quiz() {
   /* Keep track of the current question */
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+
+  
   /* Array of question objects: */
   const questions = [
     {
@@ -54,13 +57,12 @@ export default function Quiz() {
       correctAnswer: "2",
     },
   ];
-
-  /* Array of selected answers by the user
-   * Create an array with the same size as the # questions and 
-   * fill it with empty strings */
-  const [selectedAnswers, setSelectedAnswers] = useState(Array(questions.length).fill(""));
-
   
+  /* Array of selected answers by the user
+  * Create an array with the same size as the # questions and 
+  * fill it with empty strings */
+ const [selectedAnswers, setSelectedAnswers] = useState(Array(questions.length).fill(""));
+ 
   
   /* Move to previous question */
   const prevQuestion = () => {
@@ -78,7 +80,6 @@ export default function Quiz() {
       setCurrentQuestionIndex(currentQuestionIndex + 1)
     }
   }
-
 
 
   /* Submit the quiz */
@@ -125,6 +126,61 @@ export default function Quiz() {
     newAnswers[currentQuestionIndex] = option;
     setSelectedAnswers(newAnswers);
   }
+
+
+
+
+  /***********   Handle Speech   ***********/
+  /* States for recording speech from user: */
+  const [isRecording, setIsRecording] = useState(false);
+
+  /* Get functions needed from the useSpeechRecognition: */
+  const {
+    transcript,
+    resetTranscript,
+    listening,
+    browserSupportsSpeechRecognition,
+  } = useSpeechRecognition()
+
+  /* Quick check to see if browser support speech recognition: */
+  if (!browserSupportsSpeechRecognition) {
+    console.log("Sorry, your browser does not support speech recognition");
+  }
+
+  /* Start recording: */
+  const startRecording = () => {
+    SpeechRecognition.startListening({ continuous: true });
+    setIsRecording(true);
+
+    /* Reset transcript */
+    resetTranscript();
+  }
+  
+  /* Stop recording: */
+  const stopRecording = () => {
+    SpeechRecognition.stopListening();
+    setIsRecording(false);
+
+    /* Then handle users commands */
+    handleUserCommands();
+  }
+
+
+
+  /* Check transcript for user commands */
+  const handleUserCommands = () => {
+    /* Set transcript to lowercase: */
+    transcript.toLowerCase();
+
+    /* Move to next question */
+    if (transcript.includes("next")) {
+      nextQuestion()
+    }
+  }
+  
+
+
+  /***********   End Handle Speech   ***********/
 
 
 
@@ -184,9 +240,20 @@ export default function Quiz() {
               </button>
 
               {/* Speaker Button: */}
-              <button className="border-black border-[1px] rounded-lg p-2">
-                <MicrophoneIcon className="size-5 stroke-[1.35]" fill="none"/>
-              </button>
+              {isRecording ? (
+                /* Stop recording */
+                <button className="border-black border-[1px] rounded-lg p-2"
+                        onClick={stopRecording}>
+                  <StopIcon className="size-5 stroke-[1.35] animate-pulse" fill="black"/>
+                </button>
+                
+              ) : (
+                /* Start recording */
+                <button className="border-black border-[1px] rounded-lg p-2"
+                        onClick={startRecording}>
+                  <MicrophoneIcon className="size-5 stroke-[1.35]" fill="none"/>
+                </button>
+              )}
 
               {/* Submit Button or Next Button: */}
               {(currentQuestionIndex === questions.length - 1) ? (
