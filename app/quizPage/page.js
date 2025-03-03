@@ -176,11 +176,25 @@ export default function Quiz() {
     if (transcript.includes("next")) {
       nextQuestion()
     }
+    /* Move to previous question */
+    else if (transcript.includes("previous")) {
+      prevQuestion()
+    }
+    /* Choose an option on the current question */
+    /* Choose option A */
+    else if (transcript.includes("option a")) {
+      let option = questions[currentQuestionIndex].options[0]
+      console.log("Option selected is: ", option);
+      handleOptionSelect(option)
+    }
+    /* Choose option B */
+
   }
   
 
-
   /***********   End Handle Speech   ***********/
+
+
 
 
 
