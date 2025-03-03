@@ -174,8 +174,9 @@ export default function Quiz() {
             {/* Buttons */}
             <div className="flex justify-between items-center w-full px-5">
               {/* Prev Button: */}
-              <button className={`${currentQuestionIndex === 0 ? "bg-neutral-500 pointer-events-none" : "bg-black"} p-2 rounded-sm`}
+              <button className={`${currentQuestionIndex === 0 ? "bg-neutral-500" : "bg-black"} p-2 rounded-sm`}
                       onClick={prevQuestion}
+                      disabled={currentQuestionIndex === 0}
               >
                 <ChevronLeftIcon className="size-4 stroke-gray-300 stroke-[2]"
                                 strokeLinecap="round" strokeLinejoin="round"

@@ -22,6 +22,85 @@ export default function Home() {
   ];
 
 
+  /* Array of instructions to be spoken: */
+  const spokenInstructions = [
+    "Welcome to the quiz. Here are the instructions:",
+    "You can control the quiz with your voice.",
+    "To go to the next question, say the word 'next'.",
+    "To go to the previous question, say the word 'previous'.",
+    "To choose an answer, say the word 'option' followed by the letter of the answer.",
+    "To submit the quiz, say the word 'submit'.",
+    "To hear these instructions again during the quiz, say the word 'instructions'.",
+    "To begin the quiz, hit the spacebar button.",
+    "Goodluck!"
+  ]
+
+
+
+  /* Load voices asynchronously */
+  const loadVoices = () => {
+    /* Create a promise: */
+    return new Promise((resolve) => {
+      /* Try to get voice: */
+      const voices = speechSynthesis.getVoices();
+      /* If voices already loaded, resolve the promise */
+      if (voices.length !== 0) {
+        resolve(voices);
+      }
+      else {
+        /* If voices not loaded, listen to onvoiceschanged event: 
+         * it will fire when the voices finish loading.
+         * Once this is done, get the voices and resolve the promise */
+        speechSynthesis.onvoiceschanged = () => {
+          resolve(speechSynthesis.getVoices());
+        }
+      }
+    })
+  }
+
+
+
+  /* Function to speak the instructions */
+  /* async function coz we wait for the voices to load first */
+  const speakInstructions = async () => {
+    // const voices = speechSynthesis.getVoices()
+    const voices = await loadVoices();
+    const voice = voices.find((voice) => voice.lang === 'en-GB')
+
+    /* Get each instruction line as an utterance and speak it */
+    spokenInstructions.forEach((line) => {
+      const utterance = new SpeechSynthesisUtterance(line);
+      utterance.lang = 'en-US'
+      utterance.rate = 0.8
+      if (voice) {utterance.voice = voice;}
+      
+      /* speak utterance */
+      speechSynthesis.speak(utterance);
+    });
+  }
+
+
+
+  
+  /* Listener to read out the instructions when screen is clicked: */
+  useEffect(() => {
+    const handleFirstInteraction = () => {
+      speakInstructions();
+      window.removeEventListener('click', handleFirstInteraction);
+    };
+
+    /* Add event listener to when the screen is clicked first: */  
+    window.addEventListener('click', handleFirstInteraction);
+  
+    return () => {
+      window.removeEventListener('click', handleFirstInteraction);
+      speechSynthesis.cancel();
+    };
+  }, []);
+  
+  
+
+
   /* Function to enable the user to start quiz
    * by pressing spacebar. i.e. The Listener */
   const handleSpaceBar = (event) => {
