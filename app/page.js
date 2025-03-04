@@ -26,6 +26,7 @@ export default function Home() {
   const spokenInstructions = [
     "Welcome to the quiz. Here are the instructions:",
     "You can control the quiz with your voice.",
+    "To read what is on each screen, click anywhere on the screen",
     "To go to the next question, say the word 'next'.",
     "To go to the previous question, say the word 'previous'.",
     "To choose an answer, say the word 'option' followed by the letter of the answer.",
@@ -140,10 +141,8 @@ export default function Home() {
                         rounded-2xl"
         >
           {/* Click screen instruction: */}
-          <div className="flex absolute top-4 left-1/2 -translate-x-1/2 items-center whitespace-pre">
-            {/* <p>[</p> */}
-            <p className="italic border-b-[1px] border-black text-xs"> click screen to hear instructions </p>
-            {/* <p>]</p> */}
+          <div className="flex absolute bottom-8 left-1/2 -translate-x-1/2 items-center whitespace-pre">
+            <p className="border-b-[1px] border-black text-xs motion-safe:animate-pulse"> click screen to hear instructions </p>
           </div>
 
           {/* Outer Container: */}
