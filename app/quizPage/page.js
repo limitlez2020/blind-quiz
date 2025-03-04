@@ -170,27 +170,52 @@ export default function Quiz() {
   /* Check transcript for user commands */
   const handleUserCommands = () => {
     /* Set transcript to lowercase: */
-    transcript.toLowerCase();
+    let new_transcript = transcript.toLowerCase();
+    console.log("Transcript is: ", new_transcript);
 
     /* Move to next question */
-    if (transcript.includes("next")) {
+    if (new_transcript.includes("next")) {
       nextQuestion()
     }
+
     /* Move to previous question */
-    else if (transcript.includes("previous")) {
+    else if (new_transcript.includes("previous")) {
       prevQuestion()
     }
-    /* Choose an option on the current question */
-    /* Choose option A */
-    else if (transcript.includes("option a")) {
-      let option = questions[currentQuestionIndex].options[0]
-      console.log("Option selected is: ", option);
-      handleOptionSelect(option)
-    }
-    /* Choose option B */
 
+    /* Choose an option on the current question */
+    else if (new_transcript.includes("option")) {
+      let option;
+
+      /* Choose option A */
+      if (new_transcript.match(/option\s+(a|ah|ay|hey)/)) {
+        option = questions[currentQuestionIndex].options[0];
+      }
+      /* Choose option B */
+      else if (new_transcript.includes("option b")) {
+        option = questions[currentQuestionIndex].options[1];
+      }
+      /* Choose option C */
+      else if (new_transcript.includes("option c")) {
+        option = questions[currentQuestionIndex].options[2];
+      }
+      /* Choose option D */
+      else if (new_transcript.includes("option d")) {
+        option = questions[currentQuestionIndex].options[3];
+      }
+
+      /* Add the option to the selectedAnswers array i.e. select that option */
+      handleOptionSelect(option);
+    }
+
+    /* Submit Quiz: */
+    else if (new_transcript.includes("submit")) {
+      /* Only submit if at the last question */
+      if (currentQuestionIndex === (questions.length - 1)) {
+        handleSubmit()
+      }
+    }
   }
-  
 
   /***********   End Handle Speech   ***********/
 
