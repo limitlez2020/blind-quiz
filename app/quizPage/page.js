@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Option from "../components/Option";
 import { Poppins } from "next/font/google";
 import { ChevronLeftIcon, ChevronRightIcon, StopIcon } from "@heroicons/react/24/solid"
@@ -131,14 +131,11 @@ export default function Quiz() {
 
 
   /***********   Handle Speech   ***********/
-  /* States for recording speech from user: */
-  const [isRecording, setIsRecording] = useState(false);
-
   /* Get functions needed from the useSpeechRecognition: */
   const {
     transcript,
     resetTranscript,
-    listening,
+    listening,  /* see if user still recording or not */
     browserSupportsSpeechRecognition,
   } = useSpeechRecognition()
 
@@ -150,11 +147,9 @@ export default function Quiz() {
   /* Start recording: */
   const startRecording = () => {
     SpeechRecognition.startListening({ continuous: true });
-    setIsRecording(true);
 
     /* Reset transcript */
     resetTranscript();
-
     /* Turn off computer speaking */
     speechSynthesis.cancel();
   }
@@ -162,11 +157,49 @@ export default function Quiz() {
   /* Stop recording: */
   const stopRecording = () => {
     SpeechRecognition.stopListening();
-    setIsRecording(false);
-
-    /* Then handle users commands */
-    handleUserCommands();
   }
+
+
+  /* Perform users commands as soon as we stop recording: */
+  useEffect(() => {
+    if (!listening && transcript !== "") {
+      handleUserCommands();
+    }
+  }, [listening]);
+
+
+  /* Optional: use spacebar to control the microphone */
+  const toggleRecord = (event) => {
+    /* check if event key is a spacebar */
+    if (event.key === ' ') {
+      /* Prevent default spacebar behavior e.g. scrolling */
+      event.preventDefault();
+      /* Toggle recording */
+      if (listening) {
+        stopRecording();
+      }
+      else {
+        startRecording();
+      }
+    }
+  }
+
+
+
+  /* Add an event handler to listen for a spacebar key down */
+  useEffect(() => {
+    /* Create an event */
+    const handleSpacebar = (event) => {
+      toggleRecord(event)
+    }
+    /* Add event listener */
+    document.addEventListener("keydown", handleSpacebar)
+
+    /* Remove event listener */
+    return () => {
+      document.removeEventListener("keydown", handleSpacebar)
+    }
+  }, [listening])
 
 
 
@@ -320,7 +353,7 @@ export default function Quiz() {
               </button>
 
               {/* Speaker Button: */}
-              {isRecording ? (
+              {listening ? (
                 /* Stop recording */
                 <button className="border-black border-[1px] rounded-lg p-2"
                         onClick={stopRecording}>

@@ -26,7 +26,7 @@ export default function Home() {
   const spokenInstructions = [
     "Welcome to the quiz. Here are the instructions:",
     "You can control the quiz with your voice.",
-    "To read what is on each screen, click anywhere on the screen",
+    "To read the question and answer options, click anywhere on the screen",
     "To go to the next question, say the word 'next'.",
     "To go to the previous question, say the word 'previous'.",
     "To choose an answer, say the word 'option' followed by the letter of the answer.",
