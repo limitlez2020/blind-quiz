@@ -355,14 +355,14 @@ export default function Quiz() {
               {/* Speaker Button: */}
               {listening ? (
                 /* Stop recording */
-                <button className="border-black border-[1px] rounded-lg p-2"
+                <button className="border-black border-2 rounded-lg p-2"
                         onClick={stopRecording}>
                   <StopIcon className="size-5 stroke-[1.35] animate-pulse" fill="black"/>
                 </button>
                 
               ) : (
                 /* Start recording */
-                <button className="border-black border-[1px] rounded-lg p-2"
+                <button className="border-black border-2 rounded-lg p-2"
                         onClick={startRecording}>
                   <MicrophoneIcon className="size-5 stroke-[1.35]" fill="none"/>
                 </button>
