@@ -154,6 +154,9 @@ export default function Quiz() {
 
     /* Reset transcript */
     resetTranscript();
+
+    /* Turn off computer speaking */
+    speechSynthesis.cancel();
   }
   
   /* Stop recording: */
@@ -164,6 +167,39 @@ export default function Quiz() {
     /* Then handle users commands */
     handleUserCommands();
   }
+
+
+
+
+  /* Array of instructions to be spoken: */
+  const spokenInstructions = [
+    "Welcome to the quiz. Here are the instructions:",
+    "You can control the quiz with your voice.",
+    "To go to the next question, say the word 'next'.",
+    "To go to the previous question, say the word 'previous'.",
+    "To choose an answer, say the word 'option' followed by the letter of the answer.",
+    "To submit the quiz, say the word 'submit'.",
+    "To hear these instructions again during the quiz, say the word 'instructions'.",
+    "To begin the quiz, hit the spacebar button.",
+    "Goodluck!"
+  ]
+
+  /* Read Instructions: */
+  const readInstructions = () => {
+    spokenInstructions.forEach(line => {
+      /* Get utterance: */
+      const utterance = new SpeechSynthesisUtterance(line);
+      /* Set voice: */
+      let voices = speechSynthesis.getVoices()
+      let voice = voices.find(voice => voice.lang === 'en-GB')
+      if (voice) {utterance.voice = voice}
+      /* Set rate: */
+      utterance.rate = 0.8;
+      /* Speak: */
+      speechSynthesis.speak(utterance);
+    });
+  };
+
 
 
 
@@ -214,6 +250,11 @@ export default function Quiz() {
       if (currentQuestionIndex === (questions.length - 1)) {
         handleSubmit()
       }
+    }
+
+    /* Read the instruction: */
+    else if (new_transcript.includes("instruction" || "instructions")) {
+      readInstructions();
     }
   }
 
