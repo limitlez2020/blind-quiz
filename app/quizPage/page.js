@@ -8,7 +8,6 @@ import { MicrophoneIcon, SpeakerWaveIcon } from "@heroicons/react/24/outline"
 import "regenerator-runtime/runtime"
 import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 import NavBar from "../components/NavBar";
-import { async } from "regenerator-runtime";
 
 
 
@@ -63,6 +62,8 @@ export default function Quiz() {
   * Create an array with the same size as the # questions and 
   * fill it with empty strings */
  const [selectedAnswers, setSelectedAnswers] = useState(Array(questions.length).fill(""));
+ /* State to know if option was selected by voice */
+ const [optionSelectedByVoice, setOptionSelectedByVoice] = useState(false);
  
   
   /* Move to previous question */
@@ -130,6 +131,15 @@ export default function Quiz() {
     const newAnswers = [...selectedAnswers];
     newAnswers[currentQuestionIndex] = option;
     setSelectedAnswers(newAnswers);
+
+    /* If option was selected by voice, announce the option selected */
+    if (optionSelectedByVoice) {
+      let index = questions[currentQuestionIndex].options.indexOf(option);
+      let optionLetter = String.fromCharCode(65 + index);
+      let speech = ["You have selected option.", optionLetter, option];
+      read(speech);
+      setOptionSelectedByVoice(false); /* Reset */
+    }
   }
 
 
@@ -152,8 +162,6 @@ export default function Quiz() {
   /* Start recording: */
   const startRecording = () => {
     SpeechRecognition.startListening({ continuous: true });
-
-    /* Reset transcript */
     resetTranscript();
     /* Turn off computer speaking */
     speechSynthesis.cancel();
@@ -284,7 +292,10 @@ export default function Quiz() {
   /* Add a listener so whenever anywhere on the screen is clicked, read Q&A */
   useEffect(() => {
     const handleClick = (event) => {
-      if (event.target.tagName === "BUTTON") {
+      /* Exempt buttons and navbar from this event */
+      if (event.target.tagName === "BUTTON" || event.target.closest("button") ||
+          event.target.closest(".navbar-container") || event.target.closest("svg"))
+      {
         return;
       }
       read(QandA);
@@ -296,7 +307,7 @@ export default function Quiz() {
     return () => {
       document.removeEventListener("click", handleClick);
     }
-  }, [currentQuestionIndex])
+  }, [currentQuestionIndex]);
 
 
 
@@ -318,6 +329,7 @@ export default function Quiz() {
     }
 
     /* Choose an option on the current question */
+    /* Tell user what option they have selected */
     else if (new_transcript.includes("option")) {
       let option;
 
@@ -337,9 +349,12 @@ export default function Quiz() {
       else if (new_transcript.includes("option d")) {
         option = questions[currentQuestionIndex].options[3];
       }
-
+      
       /* Add the option to the selectedAnswers array i.e. select that option */
       handleOptionSelect(option);
+      /* Update state to let us know the option was slected by
+       * voice so we can read the option aloud */
+      setOptionSelectedByVoice(true);
     }
 
     /* Submit Quiz: */

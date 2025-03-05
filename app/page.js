@@ -85,7 +85,11 @@ export default function Home() {
   
   /* Listener to read out the instructions when screen is clicked: */
   useEffect(() => {
-    const handleFirstInteraction = () => {
+    const handleFirstInteraction = (event) => {
+      /* Exempt the navbar area from this event */
+      if (event.target.closest(".navbar-container")) {
+        return;
+      }
       speakInstructions();
       window.removeEventListener('click', handleFirstInteraction);
     };

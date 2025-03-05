@@ -29,7 +29,7 @@ export default function NavBar({currentQuestionIndex, totalQestions}) {
   
   return (
      /* Header */
-     <div className="flex w-full items-center justify-between px-6 py-4">
+     <div className="navbar-container flex w-full items-center justify-between px-6 py-4">
      {/* Logo: Home page */}
      <Link href={"/"}>
        <p className={`${poppins.className} font-semibold`}> Quiz </p>
