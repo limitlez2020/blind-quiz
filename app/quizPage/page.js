@@ -8,6 +8,7 @@ import { MicrophoneIcon, SpeakerWaveIcon } from "@heroicons/react/24/outline"
 import "regenerator-runtime/runtime"
 import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 import NavBar from "../components/NavBar";
+import { async } from "regenerator-runtime";
 
 
 
@@ -70,6 +71,8 @@ export default function Quiz() {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1)
     }
+    /* Turn off computer speaking */
+    speechSynthesis.cancel();
   }
 
 
@@ -79,6 +82,8 @@ export default function Quiz() {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1)
     }
+    /* Turn off computer speaking */
+    speechSynthesis.cancel();
   }
 
 
@@ -185,7 +190,6 @@ export default function Quiz() {
   }
 
 
-
   /* Add an event handler to listen for a spacebar key down */
   useEffect(() => {
     /* Create an event */
@@ -204,34 +208,95 @@ export default function Quiz() {
 
 
 
-  /* Array of instructions to be spoken: */
-  const spokenInstructions = [
-    "Welcome to the quiz. Here are the instructions:",
-    "You can control the quiz with your voice.",
+  /* Speech: instructions */
+  const instructions = [
+    "Here are the instructions:",
+    "To read the question and answer options, click anywhere on the screen",
+    "To start and stop recording your voice, hit the spacebar.",
     "To go to the next question, say the word 'next'.",
     "To go to the previous question, say the word 'previous'.",
     "To choose an answer, say the word 'option' followed by the letter of the answer.",
     "To submit the quiz, say the word 'submit'.",
     "To hear these instructions again during the quiz, say the word 'instructions'.",
-    "To begin the quiz, hit the spacebar button.",
-    "Goodluck!"
   ]
 
-  /* Read Instructions: */
-  const readInstructions = () => {
-    spokenInstructions.forEach(line => {
-      /* Get utterance: */
+
+  /* Speech: question and option answers */
+  const QandA = [
+    "Question " + (currentQuestionIndex + 1),
+    questions[currentQuestionIndex].question,
+    "Option A",
+    questions[currentQuestionIndex].options[0],
+    "",
+    "Option B",
+    questions[currentQuestionIndex].options[1],
+    "",
+    "Option C",
+    questions[currentQuestionIndex].options[2],
+    "",
+    "Option D",
+    questions[currentQuestionIndex].options[3],
+    "",
+    "Which option do you choose?",
+  ]
+
+
+  /* Load voices asynchronously */
+  const loadVoices = () => {
+    /* Create a promise: */
+    return new Promise((resolve) => {
+      /* Try to get voice: */
+      const voices = speechSynthesis.getVoices();
+      /* If voices already loaded, resolve the promise */
+      if (voices.length !== 0) {
+        resolve(voices);
+      }
+      else {
+        /* If voices not loaded, listen to onvoiceschanged event: 
+         * it will fire when the voices finish loading.
+         * Once this is done, get the voices and resolve the promise */
+        speechSynthesis.onvoiceschanged = () => {
+          resolve(speechSynthesis.getVoices());
+        }
+      }
+    })
+  }
+
+
+  /* Read Function: to read any speech given to it
+   * i.e. Q and A and intrsuctions */
+  const read = async (speech) => {
+    /* Set voice: */
+    let voices = await loadVoices();
+    let voice = voices.find(voice => voice.lang === 'en-GB')
+
+    /* Speak each line: */
+    speech.forEach(line => {
       const utterance = new SpeechSynthesisUtterance(line);
-      /* Set voice: */
-      let voices = speechSynthesis.getVoices()
-      let voice = voices.find(voice => voice.lang === 'en-GB')
       if (voice) {utterance.voice = voice}
-      /* Set rate: */
       utterance.rate = 0.8;
-      /* Speak: */
       speechSynthesis.speak(utterance);
     });
   };
+
+
+
+  /* Add a listener so whenever anywhere on the screen is clicked, read Q&A */
+  useEffect(() => {
+    const handleClick = (event) => {
+      if (event.target.tagName === "BUTTON") {
+        return;
+      }
+      read(QandA);
+    }
+
+    document.addEventListener("click", handleClick);
+
+    /* remove event listener: */
+    return () => {
+      document.removeEventListener("click", handleClick);
+    }
+  }, [currentQuestionIndex])
 
 
 
@@ -240,7 +305,7 @@ export default function Quiz() {
   const handleUserCommands = () => {
     /* Set transcript to lowercase: */
     let new_transcript = transcript.toLowerCase();
-    console.log("Transcript is: ", new_transcript);
+    // console.log("Transcript is: ", new_transcript);
 
     /* Move to next question */
     if (new_transcript.includes("next")) {
@@ -287,7 +352,7 @@ export default function Quiz() {
 
     /* Read the instruction: */
     else if (new_transcript.includes("instruction" || "instructions")) {
-      readInstructions();
+      read(instructions);
     }
   }
 
@@ -355,14 +420,14 @@ export default function Quiz() {
               {/* Speaker Button: */}
               {listening ? (
                 /* Stop recording */
-                <button className="border-black border-2 rounded-lg p-2"
+                <button className="border-black border-[1px] rounded-lg p-2"
                         onClick={stopRecording}>
                   <StopIcon className="size-5 stroke-[1.35] animate-pulse" fill="black"/>
                 </button>
                 
               ) : (
                 /* Start recording */
-                <button className="border-black border-2 rounded-lg p-2"
+                <button className="border-black border-[1px] rounded-lg p-2"
                         onClick={startRecording}>
                   <MicrophoneIcon className="size-5 stroke-[1.35]" fill="none"/>
                 </button>
