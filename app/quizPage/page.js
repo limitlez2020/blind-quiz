@@ -100,7 +100,7 @@ export default function Quiz() {
       }
       
       /* Read and display the questions unanswered: */
-      let unansweredQuestionMessage = ["You still have some questions unanswered", unansweredQuestionNums] 
+      let unansweredQuestionMessage = ["You still have questions ", unansweredQuestionNums, " unanswered"] 
       read(unansweredQuestionMessage);
       alert(unansweredQuestionMessage);
       return;
@@ -116,9 +116,13 @@ export default function Quiz() {
     })
     
     /* Read and display score and percentage */
-    let percentage = (score / questions.length) * 100;
-    let scoreMessage = ["Congrats!", "You got", score, "out of", questions.length, "questions correct",
-                        "That's a", percentage, "%"];
+    let percentage = Math.round((score / questions.length) * 100);
+    let scoreMessage = [];
+    if ((score >= 0) && (score <= Math.floor(questions.length/2))) {
+      scoreMessage = ["I'm so sorry! ", `You got ${score} out of ${questions.length} questions correct. `, `This is a ${percentage} %`, " Better luck next time!"];
+    } else {
+      scoreMessage = ["Congrats! ", `You got ${score} out of ${questions.length} questions correct. `, `This is a ${percentage} %`, " You've passed the quiz!"];
+    }
     read(scoreMessage);
     alert(scoreMessage);
   }
