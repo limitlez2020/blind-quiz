@@ -217,6 +217,7 @@ export default function Quiz() {
   /* Speech: instructions */
   const instructions = [
     "Here are the instructions:",
+    `There are ${questions.length} questions in the quiz`,
     "To read the question and answer options, click anywhere on the screen",
     "To start and stop recording your voice, hit the spacebar.",
     "To go to the next question, say the word 'next'.",
