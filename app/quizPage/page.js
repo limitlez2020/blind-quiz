@@ -106,6 +106,7 @@ export default function Quiz() {
       return;
     }
 
+
     /* Check if answers are correct: */
     let score = 0;
     questions.forEach((question, index) => {
@@ -371,10 +372,7 @@ export default function Quiz() {
 
     /* Submit Quiz: */
     else if (new_transcript.includes("submit")) {
-      /* Only submit if at the last question */
-      if (currentQuestionIndex === (questions.length - 1)) {
-        handleSubmit()
-      }
+      handleSubmit()
     }
 
     /* Read the instruction: */
