@@ -62,8 +62,6 @@ export default function Quiz() {
   * Create an array with the same size as the # questions and 
   * fill it with empty strings */
  const [selectedAnswers, setSelectedAnswers] = useState(Array(questions.length).fill(""));
- /* State to know if option was selected by voice */
- const [optionSelectedByVoice, setOptionSelectedByVoice] = useState(false);
  
   
   /* Move to previous question */
@@ -101,9 +99,11 @@ export default function Quiz() {
         }
       }
       
-      /* Print the questions unanswered: */
-      alert(`You still have some questions unanswered: ${unansweredQuestionNums}`)
-      return
+      /* Read and display the questions unanswered: */
+      let unansweredQuestionMessage = ["You still have some questions unanswered", unansweredQuestionNums] 
+      read(unansweredQuestionMessage);
+      alert(unansweredQuestionMessage);
+      return;
     }
 
     /* Check if answers are correct: */
@@ -115,9 +115,12 @@ export default function Quiz() {
       }
     })
     
-    /* Display score and percentage */
-    let percentage = (score / questions.length) * 100
-    alert(`Congrats! You got ${score} out of ${questions.length} \nPercentage is: ${percentage}`)
+    /* Read and display score and percentage */
+    let percentage = (score / questions.length) * 100;
+    let scoreMessage = ["Congrats!", "You got", score, "out of", questions.length, "questions correct",
+                        "That's a", percentage, "%"];
+    read(scoreMessage);
+    alert(scoreMessage);
   }
 
 
@@ -131,15 +134,6 @@ export default function Quiz() {
     const newAnswers = [...selectedAnswers];
     newAnswers[currentQuestionIndex] = option;
     setSelectedAnswers(newAnswers);
-
-    /* If option was selected by voice, announce the option selected */
-    if (optionSelectedByVoice) {
-      let index = questions[currentQuestionIndex].options.indexOf(option);
-      let optionLetter = String.fromCharCode(65 + index);
-      let speech = ["You have selected option.", optionLetter, option];
-      read(speech);
-      setOptionSelectedByVoice(false); /* Reset */
-    }
   }
 
 
@@ -249,6 +243,8 @@ export default function Quiz() {
   ]
 
 
+
+
   /* Load voices asynchronously */
   const loadVoices = () => {
     /* Create a promise: */
@@ -316,7 +312,6 @@ export default function Quiz() {
   const handleUserCommands = () => {
     /* Set transcript to lowercase: */
     let new_transcript = transcript.toLowerCase();
-    // console.log("Transcript is: ", new_transcript);
 
     /* Move to next question */
     if (new_transcript.includes("next")) {
@@ -349,12 +344,24 @@ export default function Quiz() {
       else if (new_transcript.includes("option d")) {
         option = questions[currentQuestionIndex].options[3];
       }
-      
-      /* Add the option to the selectedAnswers array i.e. select that option */
-      handleOptionSelect(option);
-      /* Update state to let us know the option was slected by
-       * voice so we can read the option aloud */
-      setOptionSelectedByVoice(true);
+
+      /* Create the message for option selected by voice */
+      if (option !== undefined) {
+        const index = questions[currentQuestionIndex].options.indexOf(option);
+        const optionLetter = String.fromCharCode(65 + index);
+    
+        const selectedOptionMessage = [
+          "You have selected option.",
+          optionLetter,
+          option
+        ]
+
+        /* Announce option selected: */
+        read(selectedOptionMessage);
+        
+        /* Add the option to the selectedAnswers array i.e. select that option */
+        handleOptionSelect(option);
+      }
     }
 
     /* Submit Quiz: */
